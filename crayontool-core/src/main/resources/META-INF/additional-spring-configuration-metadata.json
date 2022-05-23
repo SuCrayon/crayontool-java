@@ -1,0 +1,10 @@
+{
+  "properties": [
+    {
+      "name": "person.crayon.tool.exception.handler.data-key",
+      "type": "java.lang.String",
+      "description": "Description for person.crayon.tool.exception.handler.data-key.",
+      "defaultValue": "field"
+    }
+  ]
+}

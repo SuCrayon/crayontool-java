@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <groupId>org.springframework.boot</groupId>
+        <version>2.2.1.RELEASE</version>
+    </parent>
+
+    <groupId>person.crayon</groupId>
+    <artifactId>crayontool-java</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <modules>
+        <module>crayontool-spring-boot-starter</module>
+        <module>crayontool-spring-boot-autoconfigure</module>
+        <module>crayontool-core</module>
+    </modules>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+
+        <person.crayon.tool.versin>1.0-SNAPSHOT</person.crayon.tool.versin>
+        <cn.hutool.version>5.7.15</cn.hutool.version>
+    </properties>
+
+    <!--  依赖管理  -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>person.crayon</groupId>
+                <artifactId>crayontool-core</artifactId>
+                <version>${person.crayon.tool.versin}</version>
+            </dependency>
+            <dependency>
+                <groupId>person.crayon</groupId>
+                <artifactId>crayontool-spring-boot-autoconfigure</artifactId>
+                <version>${person.crayon.tool.versin}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-core</artifactId>
+                <version>${cn.hutool.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-json</artifactId>
+                <version>${cn.hutool.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+</project>
