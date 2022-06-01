@@ -10,7 +10,7 @@ import person.crayon.tool.core.i18n.I18nUtil;
  * @date 2022/5/23 0:07
  */
 @Configuration
-@ConditionalOnMissingBean(I18nUtil.class)
+//@ConditionalOnMissingBean(I18nUtil.class)
 public class I18nUtilAutoConfiguration {
     @Bean
     public I18nUtil i18nUtil() {

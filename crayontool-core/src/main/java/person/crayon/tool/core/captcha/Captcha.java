@@ -1,5 +1,6 @@
 package person.crayon.tool.core.captcha;
 
+import cn.hutool.core.util.IdUtil;
 import lombok.Data;
 
 /**
@@ -10,16 +11,16 @@ import lombok.Data;
 @Data
 public abstract class Captcha {
     private String key;
+    private String value;
 
     public Captcha() {
-        this.key = "random key";
+        // 生成uuid
+        this.key = IdUtil.fastSimpleUUID();
     }
 
     public Captcha(String key) {
         this.key = key;
     }
 
-    public boolean compare() {
-        return true;
-    }
+    public abstract boolean compare(String input);
 }

@@ -1,4 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 person.crayon.tool.autoconfigure.i18n.I18nUtilAutoConfiguration,\
 person.crayon.tool.autoconfigure.exception.handler.HandlerAutoConfiguration,\
-person.crayon.tool.autoconfigure.interceptor.InterceptorAutoConfiguration
+person.crayon.tool.autoconfigure.interceptor.ApiLogInterceptorAutoConfiguration

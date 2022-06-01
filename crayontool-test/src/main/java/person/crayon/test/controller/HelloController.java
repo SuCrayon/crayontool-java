@@ -5,8 +5,11 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import person.crayon.test.constants.StatusConstants;
 import person.crayon.test.domain.Params;
+import person.crayon.tool.core.captcha.check.CaptchaField;
+import person.crayon.tool.core.captcha.check.CheckCaptcha;
 import person.crayon.tool.core.exception.CustomException;
 import person.crayon.tool.core.response.ApiResponse;
+import person.crayon.tool.core.validation.constraint.EnumIntValue;
 
 import javax.validation.constraints.Min;
 
@@ -34,11 +37,13 @@ public class HelloController {
 
     @GetMapping("/param0")
     public ApiResponse param0(
-            @Min(0) @RequestParam(name = "p") Integer p
+            @EnumIntValue(enums = {100, 101}) @RequestParam(name = "p") Integer p,
+            @Min(0) @RequestParam(name = "p0") Integer p0
     ) {
         return new ApiResponse(StatusConstants.SUCCESS);
     }
 
+    @CheckCaptcha
     @PostMapping("/param1")
     public ApiResponse param1(
             @Validated @RequestBody Params params

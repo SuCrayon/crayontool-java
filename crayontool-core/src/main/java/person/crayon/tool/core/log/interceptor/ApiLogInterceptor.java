@@ -30,6 +30,7 @@ public class ApiLogInterceptor implements HandlerInterceptor {
 
     /**
      * 拦截器最终会调用该方法，你可以在里面自定义一些行为
+     *
      * @param apiLog 日志信息类
      */
     public void doSomething(ApiLog apiLog) {
@@ -40,9 +41,9 @@ public class ApiLogInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         logThreadLocal.set(
                 new ApiLog()
-                .setStartTime(System.currentTimeMillis())
-                .setMethod(request.getMethod())
-                .setUri(request.getRequestURI())
+                        .setStartTime(System.currentTimeMillis())
+                        .setMethod(request.getMethod())
+                        .setUri(request.getRequestURI())
         );
         return true;
     }

@@ -3,7 +3,7 @@ package person.crayon.tool.core.pagination;
 import lombok.Data;
 import lombok.ToString;
 
-import java.util.Map;
+import javax.validation.Valid;
 
 /**
  * @author Crayon
@@ -15,5 +15,6 @@ import java.util.Map;
 public class PageQuery<T> {
     private int current;
     private int size;
+    @Valid
     private T condition;
 }

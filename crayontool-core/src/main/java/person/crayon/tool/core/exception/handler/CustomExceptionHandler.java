@@ -1,5 +1,6 @@
 package person.crayon.tool.core.exception.handler;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import person.crayon.tool.core.exception.CustomException;

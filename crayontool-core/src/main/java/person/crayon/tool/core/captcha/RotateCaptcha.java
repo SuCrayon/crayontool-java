@@ -6,4 +6,8 @@ package person.crayon.tool.core.captcha;
  * 旋转验证码
  */
 public class RotateCaptcha extends Captcha {
+    @Override
+    public boolean compare(String input) {
+        return false;
+    }
 }

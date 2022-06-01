@@ -7,11 +7,10 @@ person:
       exception:
         handler:
           constraint:
-            enable: true
+            enable: false
           custom:
-            enable: true
+            enable: false
       captcha:
         check:
           filter:
-            url-patterns: /*
-          enable: true
+            url-patterns:

@@ -1,6 +1,7 @@
 package person.crayon.test.domain;
 
 import lombok.Data;
+import person.crayon.tool.core.captcha.check.CaptchaField;
 
 import javax.validation.constraints.NotNull;
 
@@ -10,7 +11,7 @@ import javax.validation.constraints.NotNull;
  */
 @Data
 public class Params {
-    @NotNull
+    @CaptchaField
     private String string;
     private Integer integer;
 }
