@@ -20,6 +20,11 @@ import java.io.InputStream;
 public class CustomServletRequestWrapper extends HttpServletRequestWrapper {
     private final byte[] body;
 
+    /**
+     * 重写构造器，读取出流的数据保存在body属性中，后续读取从body中读取，从而达到流多次读取的目的
+     * @param request
+     * @throws IOException
+     */
     public CustomServletRequestWrapper(HttpServletRequest request) throws IOException {
         super(request);
         ServletInputStream is = request.getInputStream();
@@ -28,6 +33,10 @@ public class CustomServletRequestWrapper extends HttpServletRequestWrapper {
         body = os.toByteArray();
     }
 
+    /**
+     * 重写获取输入流的方法，内部通过body构造新的输入流返回，从而能够让流多次被读取
+     * @return
+     */
     @Override
     public ServletInputStream getInputStream() {
         final InputStream is = new ByteArrayInputStream(body);

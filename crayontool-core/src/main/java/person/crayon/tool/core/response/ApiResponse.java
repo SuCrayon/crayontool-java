@@ -2,6 +2,7 @@ package person.crayon.tool.core.response;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
+import person.crayon.tool.core.common.Copyable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +14,7 @@ import java.util.Map;
  */
 @Data
 @Accessors(chain = true)
-public class ApiResponse {
+public class ApiResponse implements Copyable<ApiResponse> {
     /**
      * 响应状态码
      */
@@ -99,6 +100,7 @@ public class ApiResponse {
 
     /**
      * 避免JSON序列化时没有初始化返回null造成不必要的麻烦
+     *
      * @return Map
      */
     public Map<String, Object> getData() {
@@ -107,4 +109,11 @@ public class ApiResponse {
     }
 
 
+    @Override
+    public ApiResponse copy() {
+        return new ApiResponse()
+                .setCode(this.code)
+                .setMessage(this.message)
+                .setData(this.data);
+    }
 }

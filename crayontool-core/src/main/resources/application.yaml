@@ -3,7 +3,17 @@ person:
     tool:
       log:
         interceptor:
+          order: 999
           enable: true
+          format-template: '{} | {} | {} | {} ms ===> {}'
+          add-path-patterns: /**
+          exclude-path-patterns:
+      rate-limiter:
+        interceptor:
+          order: 999
+          enable: false
+          add-path-patterns: /**
+          exclude-path-patterns:
       exception:
         handler:
           constraint:
@@ -13,4 +23,7 @@ person:
       captcha:
         check:
           filter:
-            url-patterns:
+            url-patterns: /*
+spring:
+  messages:
+    basename: messages

@@ -1,9 +1,15 @@
 person:
   crayon:
     tool:
+      rate-limiter:
+        interceptor:
+          add-path-patterns: /**
+          enable: true
       log:
         interceptor:
           enable: true
+          format-template: '{0} | {1} | {2} | {3}ms'
+          add-path-patterns: /**
       exception:
         handler:
           constraint:
@@ -12,6 +18,10 @@ person:
             enable: true
       captcha:
         check:
+          enable: true
           filter:
             url-patterns: /*
-          enable: true
+
+server:
+  servlet:
+    context-path: /crayontool-test

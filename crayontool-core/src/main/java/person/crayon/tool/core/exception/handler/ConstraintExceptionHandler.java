@@ -1,6 +1,7 @@
 package person.crayon.tool.core.exception.handler;
 
 import cn.hutool.core.collection.ListUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -27,6 +28,7 @@ import java.util.List;
  * @date 2022/5/21 23:11
  * 参数校验异常处理器
  */
+@Slf4j
 @RestControllerAdvice
 public class ConstraintExceptionHandler implements InitializingBean {
 
@@ -77,7 +79,8 @@ public class ConstraintExceptionHandler implements InitializingBean {
      */
     @ExceptionHandler({MissingServletRequestParameterException.class})
     public ApiResponse handle(MissingServletRequestParameterException e) {
-        return new ApiResponse().putItem(dataKey, ListUtil.of(new ParamError(e.getParameterName(), e.getMessage())));
+        log.debug("MissingServletRequestParameterException");
+        return prototype.copy().putItem(dataKey, ListUtil.of(new ParamError(e.getParameterName(), e.getMessage())));
     }
 
     /**
@@ -87,23 +90,26 @@ public class ConstraintExceptionHandler implements InitializingBean {
      */
     @ExceptionHandler({ConstraintViolationException.class})
     public ApiResponse handle(ConstraintViolationException e) {
+        log.debug("ConstraintViolationException");
         List<ParamError> res = new ArrayList<>(e.getConstraintViolations().size());
         e.getConstraintViolations().forEach(err -> res.add(new ParamError(err.getPropertyPath().toString(), err.getMessage())));
-        return new ApiResponse().putItem(dataKey, res);
+        return prototype.copy().putItem(dataKey, res);
     }
 
     @ExceptionHandler({BindException.class})
     public ApiResponse handle(BindException e) {
+        log.debug("BindException");
         List<ParamError> res = new ArrayList<>(e.getBindingResult().getFieldErrorCount());
         e.getBindingResult().getFieldErrors().forEach(err -> res.add(new ParamError(err.getField(), i18nUtil.tryGetMessage(err.getDefaultMessage()))));
-        return new ApiResponse().putItem(dataKey, res);
+        return prototype.copy().putItem(dataKey, res);
     }
 
     @ExceptionHandler({MethodArgumentNotValidException.class})
     public ApiResponse handle(MethodArgumentNotValidException e) {
+        log.debug("MethodArgumentNotValidException");
         List<ParamError> res = new ArrayList<>(e.getBindingResult().getFieldErrorCount());
-        e.getBindingResult().getFieldErrors().forEach(err -> res.add(new ParamError(err.getField(), err.getDefaultMessage())));
-        return new ApiResponse().putItem(dataKey, res);
+        e.getBindingResult().getFieldErrors().forEach(err -> res.add(new ParamError(err.getField(), i18nUtil.tryGetMessage(err.getDefaultMessage()))));
+        return prototype.copy().putItem(dataKey, res);
     }
 
     /**
@@ -113,7 +119,8 @@ public class ConstraintExceptionHandler implements InitializingBean {
      */
     @ExceptionHandler({MethodArgumentTypeMismatchException.class})
     public ApiResponse handle(MethodArgumentTypeMismatchException e) {
-        return new ApiResponse().putItem(dataKey, new ParamError(e.getName(), e.getMessage()));
+        log.debug("MethodArgumentTypeMismatchException");
+        return prototype.copy().putItem(dataKey, new ParamError(e.getName(), e.getMessage()));
     }
 
     /**
@@ -124,6 +131,7 @@ public class ConstraintExceptionHandler implements InitializingBean {
      */
     @ExceptionHandler({HttpMessageNotReadableException.class})
     public ApiResponse handle(HttpMessageNotReadableException e) {
-        return new ApiResponse().setMessage(e.getMessage());
+        log.debug("HttpMessageNotReadableException");
+        return prototype.copy().setMessage(e.getMessage());
     }
 }

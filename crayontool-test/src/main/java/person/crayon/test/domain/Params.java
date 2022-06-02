@@ -13,5 +13,6 @@ import javax.validation.constraints.NotNull;
 public class Params {
     @CaptchaField
     private String string;
+    @NotNull
     private Integer integer;
 }
