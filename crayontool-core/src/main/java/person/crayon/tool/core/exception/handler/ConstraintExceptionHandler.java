@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -132,6 +133,12 @@ public class ConstraintExceptionHandler implements InitializingBean {
     @ExceptionHandler({HttpMessageNotReadableException.class})
     public ApiResponse handle(HttpMessageNotReadableException e) {
         log.debug("HttpMessageNotReadableException");
+        return prototype.copy().setMessage(e.getMessage());
+    }
+
+    @ExceptionHandler({HttpMediaTypeNotSupportedException.class})
+    public ApiResponse handle(HttpMediaTypeNotSupportedException e) {
+        log.debug("HttpMediaTypeNotSupportedException");
         return prototype.copy().setMessage(e.getMessage());
     }
 }

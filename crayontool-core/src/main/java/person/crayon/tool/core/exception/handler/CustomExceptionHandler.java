@@ -15,6 +15,6 @@ import person.crayon.tool.core.response.ApiResponse;
 public class CustomExceptionHandler {
     @ExceptionHandler({CustomException.class})
     public ApiResponse handle(CustomException e) {
-        return new ApiResponse(e.getStatus());
+        return new ApiResponse(e.getStatus()).setData(e.getData());
     }
 }

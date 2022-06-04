@@ -1,26 +1,28 @@
 person:
   crayon:
     tool:
-      rate-limiter:
+      rate-limit:
+        enable: true
         interceptor:
           add-path-patterns: /**
-          enable: true
       log:
+        enable: true
         interceptor:
-          enable: true
-          format-template: '{0} | {1} | {2} | {3}ms'
+          format-template: "{0} | {1} | {2} | {3}ms"
           add-path-patterns: /**
       exception:
         handler:
           constraint:
             enable: true
+            code: 400
+            message: Bad Request
           custom:
             enable: true
       captcha:
         check:
-          enable: true
           filter:
             url-patterns: /*
+          enable: true
 
 server:
   servlet:

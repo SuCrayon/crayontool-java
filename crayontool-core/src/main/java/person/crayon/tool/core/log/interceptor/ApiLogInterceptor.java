@@ -1,6 +1,8 @@
 package person.crayon.tool.core.log.interceptor;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import person.crayon.tool.core.common.domain.ApiLog;
 
@@ -13,12 +15,9 @@ import javax.servlet.http.HttpServletResponse;
  * 接口日志打印拦截器
  */
 @Slf4j
+@Component
+@ConditionalOnProperty(prefix = "person.crayon.tool.log", value = "enable", havingValue = "true", matchIfMissing = true)
 public abstract class ApiLogInterceptor implements HandlerInterceptor {
-
-    /*
-    日志格式可以配置
-    是否打印哪些内容可以配置
-     */
 
     private final ThreadLocal<ApiLog> LOG_THREADLOCAL = new ThreadLocal<>();
 
@@ -31,7 +30,7 @@ public abstract class ApiLogInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        log.info("===> api-log-interceptor");
+        log.debug("===> api-log-interceptor");
         LOG_THREADLOCAL.set(
                 new ApiLog()
                         .setStartTime(System.currentTimeMillis())

@@ -20,7 +20,7 @@ import java.util.Arrays;
  * 接口日志拦截器自动配置类
  */
 @Configuration
-@ConditionalOnProperty(prefix = "person.crayon.tool.log.interceptor", value = "enable", havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(prefix = "person.crayon.tool.log", value = "enable", havingValue = "true", matchIfMissing = true)
 public class ApiLogInterceptorAutoConfiguration implements WebMvcConfigurer {
 
     @Value("${person.crayon.tool.log.interceptor.add-path-patterns:/**}")

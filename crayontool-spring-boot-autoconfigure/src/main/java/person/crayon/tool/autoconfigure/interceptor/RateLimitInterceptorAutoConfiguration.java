@@ -5,9 +5,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import person.crayon.tool.core.common.constants.InterceptorOrder;
-import person.crayon.tool.core.log.interceptor.ApiLogInterceptor;
-import person.crayon.tool.core.ratelimiter.interceptor.RateLimiterInterceptor;
+import person.crayon.tool.core.ratelimit.interceptor.RateLimitInterceptor;
 
 import javax.annotation.Resource;
 
@@ -17,19 +15,19 @@ import javax.annotation.Resource;
  * 限流拦截器自动配置类
  */
 @Configuration
-@ConditionalOnProperty(prefix = "person.crayon.tool.rate-limiter.interceptor", value = "enable", havingValue = "true")
-public class RateLimiterInterceptorAutoConfiguration implements WebMvcConfigurer {
-    @Value("${person.crayon.tool.rate-limiter.interceptor.add-path-patterns:/**}")
+@ConditionalOnProperty(prefix = "person.crayon.tool.rate-limit", value = "enable", havingValue = "true")
+public class RateLimitInterceptorAutoConfiguration implements WebMvcConfigurer {
+    @Value("${person.crayon.tool.rate-limit.interceptor.add-path-patterns:/**}")
     private String[] addPathPatterns;
 
-    @Value("${person.crayon.tool.rate-limiter.interceptor.exclude-path-patterns:}")
+    @Value("${person.crayon.tool.rate-limit.interceptor.exclude-path-patterns:}")
     private String[] excludePathPatterns;
 
-    @Value("${person.crayon.tool.rate-limiter.interceptor.order:#{T(person.crayon.tool.core.common.constants.InterceptorOrder).RATE_LIMITER_ORDER}}")
+    @Value("${person.crayon.tool.rate-limit.interceptor.order:#{T(person.crayon.tool.core.common.constants.InterceptorOrder).RATE_LIMITER_ORDER}}")
     private int order;
 
     @Resource
-    private RateLimiterInterceptor rateLimiterInterceptor;
+    private RateLimitInterceptor rateLimiterInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {

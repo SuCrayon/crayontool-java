@@ -43,7 +43,6 @@ public class HelloController {
         return new ApiResponse(StatusConstants.SUCCESS);
     }
 
-    @CheckCaptcha
     @PostMapping("/param1")
     public ApiResponse param1(
             @Validated @RequestBody Params params
@@ -54,5 +53,13 @@ public class HelloController {
     @GetMapping("/exception")
     public ApiResponse exception() {
         throw new CustomException(StatusConstants.EXCEPTION);
+    }
+
+    @CheckCaptcha
+    @PostMapping("/check-captcha")
+    public ApiResponse checkCaptcha(
+            @RequestBody Params params
+    ) {
+        return new ApiResponse(StatusConstants.SUCCESS);
     }
 }

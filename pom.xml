@@ -51,6 +51,11 @@
                 <artifactId>hutool-json</artifactId>
                 <version>${cn.hutool.version}</version>
             </dependency>
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-cache</artifactId>
+                <version>${cn.hutool.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

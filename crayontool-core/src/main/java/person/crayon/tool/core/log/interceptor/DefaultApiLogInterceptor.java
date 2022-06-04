@@ -18,17 +18,20 @@ import java.text.MessageFormat;
  * eg. 2022/5/21 23:22:00 【GET】 /api/get 100ms ===> { ... }
  */
 @Slf4j
-@Component
 @ConditionalOnMissingBean(ApiLogInterceptor.class)
 public class DefaultApiLogInterceptor extends ApiLogInterceptor implements InitializingBean {
 
+    /**
+     * 日志格式可以配置
+     * 是否打印哪些内容可以配置
+     */
     @Value("${person.crayon.tool.log.interceptor.format-template:{0} | {1} | {2} | {3} ms ===> {4}}")
     private String formatTemplate;
 
     private MessageFormat messageFormat;
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         messageFormat = new MessageFormat(formatTemplate);
     }
 

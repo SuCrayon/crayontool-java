@@ -8,6 +8,8 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Component;
 import person.crayon.tool.core.captcha.check.CaptchaField;
 import person.crayon.tool.core.common.utils.JoinPointUtil;
 import person.crayon.tool.core.exception.CustomException;
@@ -26,6 +28,10 @@ import java.util.Arrays;
 @Aspect
 public abstract class CheckCaptchaAspect {
 
+    /**
+     * 验证码校验逻辑
+     * @param input 用户输入的验证码值
+     */
     protected abstract void check(Object input);
 
     /**
@@ -60,11 +66,11 @@ public abstract class CheckCaptchaAspect {
 
     /**
      * 前置增强
-     * @param joinPoint
+     * @param joinPoint 切点
      */
     @Before(value = "@annotation(person.crayon.tool.core.captcha.check.CheckCaptcha)")
     private void before(JoinPoint joinPoint) {
-        log.debug("CheckCaptchaAspect-before ===>");
+        log.debug("===> CheckCaptchaAspect-before");
         Object fieldValue = getCaptchaFieldValue(joinPoint);
         check(fieldValue);
     }

@@ -2,22 +2,27 @@ person:
   crayon:
     tool:
       log:
+        enable: true
         interceptor:
           order: 999
-          enable: true
-          format-template: '{} | {} | {} | {} ms ===> {}'
+          format-template: "{} | {} | {} | {} ms ===> {}"
           add-path-patterns: /**
           exclude-path-patterns:
-      rate-limiter:
+      rate-limit:
+        enable: false
+        code: 429
+        message: Too Many Requests
+        limit-freq-json-path: "limit-freq.json"
         interceptor:
-          order: 999
-          enable: false
+          order: 1000
           add-path-patterns: /**
           exclude-path-patterns:
       exception:
         handler:
           constraint:
             enable: false
+            code: 400
+            message: Bad Request
           custom:
             enable: false
       captcha:

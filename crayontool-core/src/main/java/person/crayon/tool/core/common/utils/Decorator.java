@@ -1,4 +1,4 @@
-package person.crayon.tool.core.utils.decorator;
+package person.crayon.tool.core.common.utils;
 
 import java.util.function.Consumer;
 

@@ -19,7 +19,7 @@
       "defaultValue": "Bad Request"
     },
     {
-      "name": "person.crayon.tool.log.interceptor.enable",
+      "name": "person.crayon.tool.log.enable",
       "type": "java.lang.Boolean",
       "description": "Description for person.crayon.tool.log.interceptor.enable.",
       "defaultValue": true
@@ -70,13 +70,7 @@
       ]
     },
     {
-      "name": "person.crayon.tool.rate-limiter.interceptor.enable",
-      "type": "java.lang.Boolean",
-      "description": "Description for person.crayon.tool.log.interceptor.enable.",
-      "defaultValue": false
-    },
-    {
-      "name": "person.crayon.tool.rate-limiter.interceptor.add-path-patterns",
+      "name": "person.crayon.tool.rate-limit.interceptor.add-path-patterns",
       "type": "java.lang.String[]",
       "description": "Description for person.crayon.tool.log.interceptor.path-patterns.",
       "defaultValue": [
@@ -84,7 +78,7 @@
       ]
     },
     {
-      "name": "person.crayon.tool.rate-limiter.interceptor.exclude-path-patterns",
+      "name": "person.crayon.tool.rate-limit.interceptor.exclude-path-patterns",
       "type": "java.lang.String[]",
       "description": "Description for person.crayon.tool.log.interceptor.path-patterns."
     },
@@ -95,10 +89,34 @@
       "defaultValue": 999
     },
     {
-      "name": "person.crayon.tool.rate-limiter.interceptor.order",
+      "name": "person.crayon.tool.rate-limit.interceptor.order",
       "type": "java.lang.Integer",
-      "description": "Description for person.crayon.tool.rate-limiter.interceptor.order.",
+      "description": "Description for person.crayon.tool.rate-limit.interceptor.order.",
       "defaultValue": 1000
+    },
+    {
+      "name": "person.crayon.tool.rate-limit.code",
+      "type": "java.lang.String",
+      "description": "Description for person.crayon.tool.rate-limit.code.",
+      "defaultValue": "429"
+    },
+    {
+      "name": "person.crayon.tool.rate-limit.message",
+      "type": "java.lang.String",
+      "description": "Description for person.crayon.tool.rate-limit.message.",
+      "defaultValue": "Too Many Requests"
+    },
+    {
+      "name": "person.crayon.tool.rate-limit.enable",
+      "type": "java.lang.Boolean",
+      "description": "Description for person.crayon.tool.rate-limit.enable.",
+      "defaultValue": false
+    },
+    {
+      "name": "person.crayon.tool.rate-limit.limit-freq-json-path",
+      "type": "java.lang.String",
+      "description": "Description for person.crayon.tool.rate-limit.limit-freq-json-path.",
+      "defaultValue": "limit-freq.json"
     }
   ]
 }
