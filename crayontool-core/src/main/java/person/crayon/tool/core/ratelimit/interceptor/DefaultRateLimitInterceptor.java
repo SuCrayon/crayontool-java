@@ -30,6 +30,7 @@ public class DefaultRateLimitInterceptor extends RateLimitInterceptor {
 
     /**
      * 初始化限流频率Map
+     * TODO: 问题在于如果要分别实现
      */
     private void initLimitFreqMap() {
         limitFreqMap = LimitFreqJsonFileParser.parse(path);

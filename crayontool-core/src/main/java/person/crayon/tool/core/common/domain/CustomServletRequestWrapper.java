@@ -6,10 +6,7 @@ import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 
 /**
  * @author Crayon
@@ -22,8 +19,8 @@ public class CustomServletRequestWrapper extends HttpServletRequestWrapper {
 
     /**
      * 重写构造器，读取出流的数据保存在body属性中，后续读取从body中读取，从而达到流多次读取的目的
-     * @param request
-     * @throws IOException
+     * @param request 请求对象
+     * @throws IOException IO异常
      */
     public CustomServletRequestWrapper(HttpServletRequest request) throws IOException {
         super(request);
@@ -34,12 +31,11 @@ public class CustomServletRequestWrapper extends HttpServletRequestWrapper {
     }
 
     /**
-     * 重写获取输入流的方法，内部通过body构造新的输入流返回，从而能够让流多次被读取
-     * @return
+     * 重写获取InputStream的方法，内部通过body构造新的输入流返回，从而能够让流多次被读取
+     * @return ServletInputStream
      */
     @Override
     public ServletInputStream getInputStream() {
-        final InputStream is = new ByteArrayInputStream(body);
         return new ServletInputStream() {
             @Override
             public boolean isFinished() {
@@ -48,7 +44,7 @@ public class CustomServletRequestWrapper extends HttpServletRequestWrapper {
 
             @Override
             public boolean isReady() {
-                return false;
+                return true;
             }
 
             @Override
@@ -57,9 +53,18 @@ public class CustomServletRequestWrapper extends HttpServletRequestWrapper {
             }
 
             @Override
-            public int read() throws IOException {
-                return is.read();
+            public int read() {
+                return new ByteArrayInputStream(body).read();
             }
         };
+    }
+
+    /**
+     * 重写获取Reader的方法
+     * @return BufferedReader
+     */
+    @Override
+    public BufferedReader getReader() {
+        return new BufferedReader(new InputStreamReader(getInputStream()));
     }
 }

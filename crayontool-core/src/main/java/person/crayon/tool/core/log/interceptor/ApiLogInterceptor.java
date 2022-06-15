@@ -1,8 +1,10 @@
 package person.crayon.tool.core.log.interceptor;
 
+import cn.hutool.core.date.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import person.crayon.tool.core.common.domain.ApiLog;
 
@@ -33,7 +35,7 @@ public abstract class ApiLogInterceptor implements HandlerInterceptor {
         log.debug("===> api-log-interceptor");
         LOG_THREADLOCAL.set(
                 new ApiLog()
-                        .setStartTime(System.currentTimeMillis())
+                        .setStartTime(DateUtil.current())
                         .setMethod(request.getMethod())
                         .setUri(request.getRequestURI())
         );
@@ -43,7 +45,7 @@ public abstract class ApiLogInterceptor implements HandlerInterceptor {
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         ApiLog apiLog = LOG_THREADLOCAL.get();
-        apiLog.setEndTime(System.currentTimeMillis());
+        apiLog.setEndTime(DateUtil.current());
         // TODO: 获取返回结果并设置到apiLog对象中
         doSomething(apiLog);
         // 移除避免内存泄露

@@ -1,5 +1,6 @@
 package person.crayon.tool.core.response;
 
+import cn.hutool.core.bean.BeanUtil;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import person.crayon.tool.core.common.Copyable;
@@ -56,6 +57,19 @@ public class ApiResponse implements Copyable<ApiResponse> {
                 }
             }
         }
+    }
+
+    /**
+     * 扁平化添加元素
+     * Object: { name: "Crayon", age: 18 }
+     * data: { name: "Crayon", age: 18 }
+     * @param value 值
+     * @return ApiResponse
+     */
+    public ApiResponse assignPut(Object value) {
+        this.initDataIfNeed();
+        this.data.putAll(BeanUtil.beanToMap(value));
+        return this;
     }
 
     /**

@@ -1,3 +1,4 @@
+
 person:
   crayon:
     tool:
@@ -27,3 +28,4 @@ person:
 server:
   servlet:
     context-path: /crayontool-test
+  port: 28080

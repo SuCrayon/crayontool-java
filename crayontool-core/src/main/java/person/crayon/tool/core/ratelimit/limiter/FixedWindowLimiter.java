@@ -65,6 +65,7 @@ public class FixedWindowLimiter implements Limiter {
         count = limitRecord.incrCount();
         LimitResult limitResult = new LimitResult();
         boolean allow = count <= limitFreq.getAmount();
+		// TODO: 这里不需要设置请求时间，设置了的话那么只有请求数量达到阈值之前所有的剩余时间均等于时间窗口大小，达到阈值之后才会慢慢递减
         if (allow) {
             // 如果限流通过的话，就要设置最新的请求时间
             limitRecord.setLastRequestTime(currentTime);
