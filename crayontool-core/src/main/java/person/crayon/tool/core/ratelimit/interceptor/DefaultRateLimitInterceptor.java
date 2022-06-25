@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import person.crayon.tool.core.common.domain.ratelimit.LimitFreq;
-import person.crayon.tool.core.common.domain.ratelimit.LimitFreqJsonFileParser;
+import person.crayon.tool.core.common.utils.RateLimitUtil;
 import person.crayon.tool.core.ratelimit.limiter.FixedWindowLimiter;
 
 import java.util.Map;
@@ -33,7 +33,7 @@ public class DefaultRateLimitInterceptor extends RateLimitInterceptor {
      * TODO: 问题在于如果要分别实现
      */
     private void initLimitFreqMap() {
-        limitFreqMap = LimitFreqJsonFileParser.parse(path);
+        limitFreqMap = RateLimitUtil.limitFreqFile2Map(path);
     }
 
     @Override
@@ -47,8 +47,8 @@ public class DefaultRateLimitInterceptor extends RateLimitInterceptor {
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
-        super.afterPropertiesSet();
+    public void init() {
+        super.init();
         log.debug("{}: limit-freq-json-path: {}", this.getClass().getSimpleName(), path);
         log.debug("{}: init limit-freq-map...", this.getClass().getSimpleName());
         initLimitFreqMap();

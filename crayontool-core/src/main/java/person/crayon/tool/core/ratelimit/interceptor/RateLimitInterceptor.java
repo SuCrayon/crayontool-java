@@ -1,8 +1,6 @@
 package person.crayon.tool.core.ratelimit.interceptor;
 
-import cn.hutool.core.io.resource.ResourceUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,17 +8,15 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import person.crayon.tool.core.common.domain.ratelimit.LimitFreq;
-import person.crayon.tool.core.common.domain.ratelimit.LimitFreqJsonFileParser;
 import person.crayon.tool.core.common.domain.ratelimit.LimitResult;
 import person.crayon.tool.core.common.utils.HttpUtil;
+import person.crayon.tool.core.common.utils.RateLimitUtil;
 import person.crayon.tool.core.exception.CustomException;
 import person.crayon.tool.core.ratelimit.limiter.Limiter;
-import person.crayon.tool.core.response.ApiResponse;
 import person.crayon.tool.core.response.ResponseStatus;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -66,14 +62,17 @@ public abstract class RateLimitInterceptor implements HandlerInterceptor, Initia
      */
     protected abstract Map<String, LimitFreq> getLimitFreq();
 
+    protected String getRequestPath(HttpServletRequest request) {
+        return RateLimitUtil.getRequestPathWithMethod(request);
+    }
+
     /**
      * 获取限流标识
-     * 默认实现则是取ip+uri作为标识
-     * @param uri uri
+     * @param requestPath requestPath
      * @return 限流标识
      */
-    protected String getThrottleId(String uri) {
-        return StrUtil.format("{}-{}", uri, HttpUtil.getRealIp());
+    protected String getThrottleId(String requestPath) {
+        return requestPath;
     }
 
     /**
@@ -96,16 +95,17 @@ public abstract class RateLimitInterceptor implements HandlerInterceptor, Initia
 
     /**
      * 限流
-     * @param uri uri
+     * @param requestPath 请求路径，"[方法] [uri]"
      * @return 限流结果，是否放行
      */
-    protected LimitResult rateLimit(String uri, HttpServletResponse response) {
+    protected LimitResult rateLimit(String requestPath, HttpServletResponse response) {
         Map<String, LimitFreq> limitFreqMap = getLimitFreq();
-        if (!limitFreqMap.containsKey(uri)) {
+        if (!limitFreqMap.containsKey(requestPath)) {
+            // 不在规则内则默认放行
             return LimitResult.allow();
         }
         // 限流器逻辑
-        LimitResult result = limiter.check(getThrottleId(uri), limitFreqMap.get(uri));
+        LimitResult result = limiter.check(getThrottleId(requestPath), limitFreqMap.get(requestPath));
         setHeaders(response, result);
         return result;
     }
@@ -113,19 +113,23 @@ public abstract class RateLimitInterceptor implements HandlerInterceptor, Initia
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         log.debug("===> rate-limit-interceptor");
-        String uri = request.getRequestURI();
-        LimitResult result = rateLimit(uri, response);
+        String requestPath = getRequestPath(request);
+        LimitResult result = rateLimit(requestPath, response);
         if (result.isAllow()) {
             return true;
         }
         throw new CustomException(responseStatus.copy());
     }
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
+    protected void init() {
         // 初始化响应状态的原型类
         responseStatus = new ResponseStatus(code, message);
         log.debug("{}: init limier...", this.getClass().getSimpleName());
         initLimiter();
+    }
+
+    @Override
+    public final void afterPropertiesSet() {
+        init();
     }
 }

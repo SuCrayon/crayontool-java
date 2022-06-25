@@ -57,19 +57,13 @@ public class FixedWindowLimiter implements Limiter {
         } else {
             // 直接放行
             // 保存这次的请求时间戳，过期时间就是限流频率的时间跨度
-            limitRecord = new LimitRecord();
+            limitRecord = new LimitRecord().setLastRequestTime(currentTime);
             cache.put(throttleId, limitRecord, limitFreq.getMilliSpan());
-            // return limitResult.setAllow(true).setRemainCount(limitFreq.getAmount() - limitRecord.getCount()).setRemainResetTime(limitRecord.getLastRequestTime() + limitFreq.getMilliSpan() - currentTime);
         }
         // 自增
         count = limitRecord.incrCount();
         LimitResult limitResult = new LimitResult();
         boolean allow = count <= limitFreq.getAmount();
-		// TODO: 这里不需要设置请求时间，设置了的话那么只有请求数量达到阈值之前所有的剩余时间均等于时间窗口大小，达到阈值之后才会慢慢递减
-        if (allow) {
-            // 如果限流通过的话，就要设置最新的请求时间
-            limitRecord.setLastRequestTime(currentTime);
-        }
         // 判断是否小于等于阈值
         limitResult.setAllow(allow).setRemainCount(Math.max(0, limitFreq.getAmount() - limitRecord.getCount())).setRemainResetTime(limitRecord.getLastRequestTime() + limitFreq.getMilliSpan() - currentTime);
         return limitResult;
