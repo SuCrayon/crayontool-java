@@ -1,39 +1,59 @@
 package person.crayon.tool.core.common.domain.ratelimit;
 
+import cn.hutool.core.util.StrUtil;
 import lombok.Data;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import org.springframework.http.HttpMethod;
 
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 /**
  * @author Crayon
- * @date 2022/6/3 20:42
- * 限流频率
+ * @date 2022/6/26 12:48
+ * 限流规则
  */
 @Data
 @Accessors(chain = true)
 @ToString
-public class LimitFreq {
+public class LimitRule {
     /**
-     * 值
+     * 请求方法
+     */
+    private HttpMethod method;
+
+    /**
+     * 请求uri
+     */
+    private String uri;
+
+    /**
+     * 限流值
      */
     private int amount;
+
     /**
      * 时间单位
      */
     private TimeUnit unit;
 
-    public LimitFreq() {
-    }
+    /**
+     * 描述信息
+     */
+    private String description;
 
-    public LimitFreq(int amount, TimeUnit unit) {
-        this.amount = amount;
-        this.unit = unit;
+    /**
+     * 设置默认空串
+     * @param description 描述信息
+     */
+    public void setDescription(String description) {
+        this.description = Optional.ofNullable(description).orElse(StrUtil.EMPTY);
     }
 
     /**
      * 获取毫秒级时间跨度
+     *
      * @return 毫秒数
      */
     public long getMilliSpan() {
@@ -42,6 +62,7 @@ public class LimitFreq {
 
     /**
      * 获取秒级时间跨度
+     *
      * @return 秒数
      */
     public long getSecondSpan() {

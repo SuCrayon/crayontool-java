@@ -17,14 +17,24 @@ public class LimitResult {
      * 是否允许
      */
     private boolean allow;
+
     /**
      * 剩余请求次数
      */
     private int remainCount;
+
     /**
      * 剩余重置时间
      */
     private long remainResetTime;
+
+    /**
+     * 是否禁止
+     * @return boolean
+     */
+    public boolean isForbid() {
+        return !this.allow;
+    }
 
     public static LimitResult allow() {
         return new LimitResult().setAllow(true);

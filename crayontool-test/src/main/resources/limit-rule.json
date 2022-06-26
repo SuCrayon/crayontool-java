@@ -1,0 +1,16 @@
+[
+  {
+    "method": "GET",
+    "uri": "/crayontool-test/hello",
+    "amount": 2,
+    "unit": "MINUTES",
+    "description": "2/s, 每秒2次"
+  },
+  {
+    "method": "POST",
+    "uri": "/crayontool-test/param",
+    "amount": 1,
+    "unit": "MINUTES",
+    "description": "1/m, 每分钟1次"
+  }
+]

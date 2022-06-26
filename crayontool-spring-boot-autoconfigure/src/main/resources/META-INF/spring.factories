@@ -3,5 +3,5 @@ person.crayon.tool.autoconfigure.i18n.I18nUtilAutoConfiguration,\
 person.crayon.tool.autoconfigure.exception.handler.HandlerAutoConfiguration,\
 person.crayon.tool.core.log.interceptor.DefaultApiLogInterceptor,\
 person.crayon.tool.autoconfigure.interceptor.ApiLogInterceptorAutoConfiguration,\
-person.crayon.tool.core.ratelimit.interceptor.DefaultRateLimitInterceptor,\
+person.crayon.tool.core.ratelimit.interceptor.RateLimitInterceptor,\
 person.crayon.tool.autoconfigure.interceptor.RateLimitInterceptorAutoConfiguration

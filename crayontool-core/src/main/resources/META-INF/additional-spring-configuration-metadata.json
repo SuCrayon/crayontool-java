@@ -62,14 +62,6 @@
       "defaultValue": false
     },
     {
-      "name": "person.crayon.tool.captcha.check.filter.url-patterns",
-      "type": "java.lang.String[]",
-      "description": "Description for person.crayon.tool.captcha.check.filter.url-patterns.",
-      "defaultValue": [
-        "/*"
-      ]
-    },
-    {
       "name": "person.crayon.tool.rate-limit.interceptor.add-path-patterns",
       "type": "java.lang.String[]",
       "description": "Description for person.crayon.tool.log.interceptor.path-patterns.",
@@ -111,12 +103,6 @@
       "type": "java.lang.Boolean",
       "description": "Description for person.crayon.tool.rate-limit.enable.",
       "defaultValue": false
-    },
-    {
-      "name": "person.crayon.tool.rate-limit.limit-freq-json-path",
-      "type": "java.lang.String",
-      "description": "Description for person.crayon.tool.rate-limit.limit-freq-json-path.",
-      "defaultValue": "limit-freq.json"
     }
   ]
 }

@@ -1,4 +1,3 @@
-
 person:
   crayon:
     tool:
@@ -21,8 +20,6 @@ person:
             enable: true
       captcha:
         check:
-          filter:
-            url-patterns: /*
           enable: true
 
 server:

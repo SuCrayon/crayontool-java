@@ -4,9 +4,9 @@ import cn.hutool.cache.CacheUtil;
 import cn.hutool.cache.impl.TimedCache;
 import cn.hutool.core.date.DateUtil;
 import lombok.extern.slf4j.Slf4j;
-import person.crayon.tool.core.common.domain.ratelimit.LimitFreq;
 import person.crayon.tool.core.common.domain.ratelimit.LimitRecord;
 import person.crayon.tool.core.common.domain.ratelimit.LimitResult;
+import person.crayon.tool.core.common.domain.ratelimit.LimitRule;
 
 import java.util.concurrent.TimeUnit;
 
@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
  * 固定窗口限流器
  */
 @Slf4j
-public class FixedWindowLimiter implements Limiter {
+public abstract class FixedWindowLimiter extends Limiter {
 
     /**
      * 缓存超时时间（毫秒）
@@ -33,13 +33,8 @@ public class FixedWindowLimiter implements Limiter {
      */
     private final TimedCache<String, LimitRecord> cache = CacheUtil.newTimedCache(TIMEOUT);
 
-    public FixedWindowLimiter() {
-        // 开启定时任务清理缓存内容，如果不开启的话是懒惰式检查，只有获取key的时候才去检查键是否过期
-        cache.schedulePrune(DELAY);
-    }
-
     @Override
-    public LimitResult check(String throttleId, LimitFreq limitFreq) {
+    protected LimitResult checkRule(String throttleId, LimitRule limitRule) {
         long currentTime = DateUtil.current();
         LimitRecord limitRecord;
         int count;
@@ -47,7 +42,7 @@ public class FixedWindowLimiter implements Limiter {
         if (cache.containsKey(throttleId)) {
             // 缓存中有，则需要取出来进行判断
             limitRecord = cache.get(throttleId);
-            if (currentTime - limitRecord.getLastRequestTime() > limitFreq.getMilliSpan()) {
+            if (currentTime - limitRecord.getLastRequestTime() > limitRule.getMilliSpan()) {
                 // 当前时间 - 上次请求时间 大于 限定的时间跨度了
                 // 计数清空
                 limitRecord.clearCount();
@@ -58,14 +53,14 @@ public class FixedWindowLimiter implements Limiter {
             // 直接放行
             // 保存这次的请求时间戳，过期时间就是限流频率的时间跨度
             limitRecord = new LimitRecord().setLastRequestTime(currentTime);
-            cache.put(throttleId, limitRecord, limitFreq.getMilliSpan());
+            cache.put(throttleId, limitRecord, limitRule.getMilliSpan());
         }
         // 自增
         count = limitRecord.incrCount();
         LimitResult limitResult = new LimitResult();
-        boolean allow = count <= limitFreq.getAmount();
+        boolean allow = count <= limitRule.getAmount();
         // 判断是否小于等于阈值
-        limitResult.setAllow(allow).setRemainCount(Math.max(0, limitFreq.getAmount() - limitRecord.getCount())).setRemainResetTime(limitRecord.getLastRequestTime() + limitFreq.getMilliSpan() - currentTime);
+        limitResult.setAllow(allow).setRemainCount(Math.max(0, limitRule.getAmount() - limitRecord.getCount())).setRemainResetTime(limitRecord.getLastRequestTime() + limitRule.getMilliSpan() - currentTime);
         return limitResult;
     }
 }
