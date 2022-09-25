@@ -21,6 +21,8 @@ person:
       captcha:
         check:
           enable: true
+      desensitization:
+        enable: true
 
 server:
   servlet:

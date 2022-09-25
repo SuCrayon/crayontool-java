@@ -103,6 +103,12 @@
       "type": "java.lang.Boolean",
       "description": "Description for person.crayon.tool.rate-limit.enable.",
       "defaultValue": false
+    },
+    {
+      "name": "person.crayon.tool.desensitization.enable",
+      "type": "java.lang.Boolean",
+      "description": "Description for person.crayon.tool.desensitization.enable.",
+      "defaultValue": false
     }
   ]
 }

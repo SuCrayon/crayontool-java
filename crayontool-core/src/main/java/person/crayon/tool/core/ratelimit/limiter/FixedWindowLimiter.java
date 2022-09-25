@@ -33,6 +33,23 @@ public abstract class FixedWindowLimiter extends Limiter {
      */
     private final TimedCache<String, LimitRecord> cache = CacheUtil.newTimedCache(TIMEOUT);
 
+    /**
+     * 缓存自动清理的钩子函数，子类重写以控制是否开启缓存自动清理
+     * 
+     * @return
+     */
+    protected boolean isCacheAutoClean() {
+        return false;
+    }
+
+    public FixedWindowLimiter() {
+        if (isCacheAutoClean()) {
+            log.debug("turn on cache auto clean");
+            // 开启定时任务清理缓存内容，如果不开启的话是懒惰式检查，只有获取key的时候才去检查键是否过期
+            cache.schedulePrune(DELAY);
+        }
+    }
+
     @Override
     protected LimitResult checkRule(String throttleId, LimitRule limitRule) {
         long currentTime = DateUtil.current();

@@ -25,6 +25,7 @@ mvn-install.cmd                       - starter打包脚本
 - 限流
 - ✔统一接口响应
 - ✔参数校验
+- 脱敏
 - 敏感词过滤
 - XSS过滤
 - ZooKeeper-Curator整合
@@ -99,6 +100,66 @@ person:
           # 接口拦截路径
           add-path-patterns: /**
 ```
+
+### 脱敏
+结合注解和AOP实现自动脱敏功能
+脱敏示例
+```json
+{
+"code": "200",
+"message": "请求成功",
+"timestamp": 1664102170480,
+"data": {
+"email": "6********@qq.com",
+"inner": {
+"mobilePhone": "138****1234",
+"userID": "0"
+},
+"userInfoInnerList": [
+{
+"mobilePhone": "135****5678",
+"userID": "0"
+}
+],
+"addressList": [
+"神奈川********"
+],
+"addressMap": {
+"湘北": "神奈川********",
+"山王工业": "秋田县县立********"
+},
+"userInfoInnerMap": {
+"one": {
+"mobilePhone": "138****5678",
+"userID": ""
+},
+"two": {
+"mobilePhone": "138****4321",
+"userID": ""
+}
+}
+}
+}
+```
+#### 注解说明
+`@DesensitizeField`
+标注需要脱敏的字段
+其中有type属性用于指定脱敏的类型，具体类型参照hutool中的脱敏类型
+
+`@Desensitize`
+标注需要脱敏的方法
+
+#### 如何使用
+在application.yaml中添加如下配置开启自动脱敏，默认`不开启`
+```yaml
+person:
+  crayon:
+    tool:
+      desensitization:
+        enable: true
+```
+
+
 
 ### 国际化
 封装i18n工具类，直接注入Spring容器中，可以通过依赖注入直接使用

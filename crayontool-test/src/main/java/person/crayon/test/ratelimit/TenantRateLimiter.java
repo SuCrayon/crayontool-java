@@ -25,4 +25,9 @@ public class TenantRateLimiter extends FixedWindowLimiter {
     protected List<LimitRule> loadLimitRule() {
         return RateLimitUtil.loadLimitRuleFile("limit-rule.json");
     }
+
+    @Override
+    protected boolean isCacheAutoClean() {
+        return true;
+    }
 }
