@@ -4,6 +4,8 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import person.crayon.tool.core.i18n.I18nUtil;
+import person.crayon.tool.core.i18n.plural.PluralSyntaxParser;
+import person.crayon.tool.core.i18n.plural.impl.PluralSyntaxParserImpl;
 
 /**
  * @author Crayon
@@ -15,5 +17,10 @@ public class I18nUtilAutoConfiguration {
     @Bean
     public I18nUtil i18nUtil() {
         return new I18nUtil();
+    }
+
+    @Bean
+    public PluralSyntaxParser pluralSyntaxParser() {
+        return new PluralSyntaxParserImpl();
     }
 }

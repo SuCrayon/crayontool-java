@@ -11,17 +11,21 @@ import person.crayon.test.constants.StatusConstants;
 import person.crayon.test.domain.Params;
 import person.crayon.test.domain.UserInfo;
 import person.crayon.test.domain.UserInfo.UserInfoInner;
+import person.crayon.test.service.DesensitizeService;
 import person.crayon.tool.core.captcha.check.CaptchaField;
 import person.crayon.tool.core.captcha.check.CheckCaptcha;
 import person.crayon.tool.core.desensitization.Desensitize;
 import person.crayon.tool.core.exception.CustomException;
+import person.crayon.tool.core.i18n.I18nUtil;
 import person.crayon.tool.core.response.ApiResponse;
 import person.crayon.tool.core.response.ApiResult;
 import person.crayon.tool.core.validation.constraint.EnumIntValue;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.validation.constraints.Min;
 
 /**
@@ -33,6 +37,12 @@ import javax.validation.constraints.Min;
 @RequestMapping("/hello")
 @Validated
 public class HelloController {
+
+    @Resource
+    private DesensitizeService desensitizeService;
+
+    @Resource
+    private I18nUtil i18nUtil;
 
     @GetMapping
     public ApiResponse get() {
@@ -74,21 +84,20 @@ public class HelloController {
         return new ApiResponse(StatusConstants.SUCCESS);
     }
 
-    @Desensitize
     @GetMapping("/desensitization")
-    public ApiResult<UserInfo> desensitization() {
-        List<String> addressList = ListUtil.of("神奈川县立湘北高等学校");
-        List<UserInfoInner> userInfoInnerList = ListUtil.of(new UserInfoInner().setMobilePhone("13512345678").setUserID("10001002"));
-        Map<String, String> addressMap = MapUtil.newHashMap();
-        addressMap.put("湘北", "神奈川县立湘北高等学校");
-        addressMap.put("山王工业", "秋田县县立山王工业高等学校");
-        Map<String, UserInfoInner> userInfoInnerMap = MapUtil.newHashMap();
-        userInfoInnerMap.put("one", new UserInfoInner().setMobilePhone("13812345678"));
-        userInfoInnerMap.put("two", new UserInfoInner().setMobilePhone("13887654321"));
-        return new ApiResult<UserInfo>(StatusConstants.SUCCESS).setData(
-            new UserInfo().setEmail("614812345@qq.com").setInner(
-                new UserInfoInner().setMobilePhone("13823301234").setUserID("10001001")
-            ).setAddressList(addressList).setUserInfoInnerList(userInfoInnerList).setAddressMap(addressMap).setUserInfoInnerMap(userInfoInnerMap)
+    public ApiResponse desensitization() {
+        /*return new ApiResult<UserInfo>(StatusConstants.SUCCESS).setData(
+                desensitizeService.getUserInfo()
+        );*/
+        return new ApiResponse().setStatus(StatusConstants.SUCCESS).assignPut(
+                desensitizeService.getUserInfo()
         );
+    }
+
+    @GetMapping("/i18n")
+    public ApiResponse i18n(
+            @RequestParam("count") int count
+    ) {
+        return new ApiResponse().setStatus(StatusConstants.SUCCESS).putItem("message", i18nUtil.getMessageWithPluralSyntax("person.crayon.tool.test.hello.pluralSyntax.1", Locale.US ,count));
     }
 }

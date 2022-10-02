@@ -16,7 +16,7 @@ mvn-install.cmd                       - starter打包脚本
 ```
 
 ## 功能模块
-- ✔[验证码](#验证码)
+- [验证码](#验证码)
 - 通用
 - ✔异常
 - ✔国际化
@@ -25,7 +25,7 @@ mvn-install.cmd                       - starter打包脚本
 - 限流
 - ✔统一接口响应
 - ✔参数校验
-- 脱敏
+- ✔脱敏
 - 敏感词过滤
 - XSS过滤
 - ZooKeeper-Curator整合
@@ -106,39 +106,37 @@ person:
 脱敏示例
 ```json
 {
-"code": "200",
-"message": "请求成功",
-"timestamp": 1664102170480,
-"data": {
-"email": "6********@qq.com",
-"inner": {
-"mobilePhone": "138****1234",
-"userID": "0"
-},
-"userInfoInnerList": [
-{
-"mobilePhone": "135****5678",
-"userID": "0"
-}
-],
-"addressList": [
-"神奈川********"
-],
-"addressMap": {
-"湘北": "神奈川********",
-"山王工业": "秋田县县立********"
-},
-"userInfoInnerMap": {
-"one": {
-"mobilePhone": "138****5678",
-"userID": ""
-},
-"two": {
-"mobilePhone": "138****4321",
-"userID": ""
-}
-}
-}
+  "code": "200",
+  "message": "请求成功",
+  "timestamp": 1664102170480,
+  "data": {
+    "email": "6********@qq.com",
+    "inner": {
+      "mobilePhone": "138****1234",
+      "userID": "0"
+    },
+    "userInfoInnerList": [{
+      "mobilePhone": "135****5678",
+      "userID": "0"
+    }],
+    "addressList": [
+      "神奈川********"
+    ],
+    "addressMap": {
+      "湘北": "神奈川********",
+      "山王工业": "秋田县县立********"
+    },
+    "userInfoInnerMap": {
+      "one": {
+        "mobilePhone": "138****5678",
+        "userID": ""
+      },
+      "two": {
+        "mobilePhone": "138****4321",
+        "userID": ""
+      }
+    }
+  }
 }
 ```
 #### 注解说明
@@ -164,6 +162,25 @@ person:
 ### 国际化
 封装i18n工具类，直接注入Spring容器中，可以通过依赖注入直接使用
 
+配置了表达式语法，可以用于区分不同的情况选择相应的单词，暂且叫做复数表达式，可以用于解决单复数情况下单词不一致的问题等等
+
+语法规则：
+${}包括的内容添上{}就是一个json格式的对象了
+其中的key为选择规则，如：[0]==1，含义是当第1个参数的值等于1时，选择该key对应的value作为该表达式块的替换值
+
+栗子：
+```properties
+person.crayon.tool.test.hello.pluralSyntax.1=there ${"[0]==1": "is", "[0]!=1": "are"} {0} ${"[0]==1": "child", "[0]!=1": "children"} on the playground.
+```
+这个消息需要传递一个children的数量进行填充生成最终的消息串
+
+`${"[0]==1": "is", "[0]!=1": "are"}`
+该表达式的作用在于根据传递的children的值选择是用is还是are，如果等于1则使用is，如果不等于1则使用are
+
+还可以添加一个key为`default`的键值对作为默认值，当无匹配的选择项时，则使用该键的值作为替换值
+
+> 如果最终没有任何的匹配值，则该语法块会被替换为空串
+> 可以在${前加上\进行转义，该语法块不会进行解析，最好使用''包裹该转义后的语法块，因为{}包裹的内容会被MessageSource.format解析
 
 ### 限流
 通过Interceptor实现接口限流，我认为限流根据业务可以分为两种
