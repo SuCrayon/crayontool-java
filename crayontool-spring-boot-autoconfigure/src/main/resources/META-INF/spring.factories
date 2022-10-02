@@ -5,4 +5,4 @@ person.crayon.tool.core.log.interceptor.DefaultApiLogInterceptor,\
 person.crayon.tool.autoconfigure.interceptor.ApiLogInterceptorAutoConfiguration,\
 person.crayon.tool.core.ratelimit.interceptor.RateLimitInterceptor,\
 person.crayon.tool.autoconfigure.interceptor.RateLimitInterceptorAutoConfiguration,\
-person.crayon.tool.core.desensitization.aspect.DesensitizeAspect
+person.crayon.tool.autoconfigure.desensitization.DesensitizationAutoConfiguration

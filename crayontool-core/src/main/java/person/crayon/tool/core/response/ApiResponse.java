@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import person.crayon.tool.core.common.Copyable;
+import person.crayon.tool.core.desensitization.DesensitizeField;
 
 import java.util.HashMap;
 import java.util.Map;

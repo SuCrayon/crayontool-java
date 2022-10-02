@@ -35,7 +35,6 @@ public class ApiResult<T> implements Copyable<ApiResult<T>> {
     /**
      * 返回数据
      */
-    @DesensitizeField
     private T data;
 
     public ApiResult() {
