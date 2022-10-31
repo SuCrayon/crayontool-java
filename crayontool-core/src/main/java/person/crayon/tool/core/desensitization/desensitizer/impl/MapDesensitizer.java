@@ -29,7 +29,7 @@ public class MapDesensitizer implements Desensitizer {
         }
         Map<Object, Object> retMap = (Map<Object, Object>) ReflectUtil.newInstanceIfPossible(ctx.getField().getType());
         for (Map.Entry<Object, Object> entry : originMap.entrySet()) {
-            if (entry.getValue().getClass() == String.class) {
+            if (entry.getValue() instanceof String) {
                 // 字符串类型
                 retMap.put(
                         entry.getKey(),

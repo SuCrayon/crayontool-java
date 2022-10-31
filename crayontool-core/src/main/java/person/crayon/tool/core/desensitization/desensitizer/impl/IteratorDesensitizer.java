@@ -33,7 +33,7 @@ public class IteratorDesensitizer implements Desensitizer {
         }
         Collection<Object> retCollection = (Collection<Object>) ReflectUtil.newInstanceIfPossible(ctx.getField().getType());
         for (Object value : originCollection) {
-            if (value.getClass() == String.class) {
+            if (value instanceof String) {
                 // 字符串类型
                 retCollection.add(
                         DesensitizedUtil.desensitized((String) value, ctx.getDesensitizedType())
