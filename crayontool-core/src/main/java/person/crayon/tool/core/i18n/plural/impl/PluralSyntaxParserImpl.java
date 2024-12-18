@@ -56,7 +56,18 @@ public class PluralSyntaxParserImpl implements PluralSyntaxParser {
             c = input.charAt(i);
             if (tuple.getState() == State.NONE_FIND) {
                 if (c == LEFT_BOUND_START) {
-                    if ((i == 0 || input.charAt(i - 1) != ESCAPE) && i + 2 < input.length() && input.charAt(i + 1) == LEFT_BOUND) {
+                    boolean flag = true;
+                    if (i > 0 && input.charAt(i - 1) == ESCAPE) {
+                        flag = false;
+                        // 有转义字符
+                        if (i > 1 && input.charAt(i - 2) == ESCAPE) {
+                            // 转义字符前面还有转义，则不转义
+                            flag = true;
+                        }
+                    } else {
+                        // 没有转义字符
+                    }
+                    if (flag && i + 2 < input.length() && input.charAt(i + 1) == LEFT_BOUND) {
                         // 不是转义，且下一个是左边界符
                         // i + 2 < input.length() 是因为$后面至少要有这两个字符{}
                         tuple.setState(State.START);
@@ -65,8 +76,11 @@ public class PluralSyntaxParserImpl implements PluralSyntaxParser {
                 }
             } else if (tuple.getState() == State.START) {
                 if (c == RIGHT_BOUND) {
+                    // 找到右边界符，加入结果集
                     tuple.setEndIndex(i);
                     tuple.setState(State.END);
+                    ret.add(tuple);
+                    tuple = new Tuple();
                 } else if (c == QUOTES) {
                     tuple.setState(State.QUOTES);
                 }
@@ -76,8 +90,7 @@ public class PluralSyntaxParserImpl implements PluralSyntaxParser {
                     tuple.setState(State.START);
                 }
             } else if (tuple.getState() == State.END) {
-                ret.add(tuple);
-                tuple = new Tuple();
+
             } else {
                 // at least for now there's nothing to do here
             }
